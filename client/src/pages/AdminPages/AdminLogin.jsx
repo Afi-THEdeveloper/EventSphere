@@ -37,7 +37,7 @@ function AdminLogin() {
             if(res.data.success){
               toast.success(res.data.success)
               localStorage.setItem('adminToken', res.data.token)
-              navigate(ServerVariables.UserHome)
+              navigate(ServerVariables.AdminHome)
             }else{
               dispatch(hideLoading())
               toast.error(res.data.error)

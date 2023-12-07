@@ -1,8 +1,7 @@
-import React from "react";
-import {Routes,Route} from 'react-router-dom'
+import React, { useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { ServerVariables } from "./ServerVariables";
-import {Toaster}  from 'react-hot-toast'
-
+import { Toaster } from "react-hot-toast";
 
 import LandingPage from "../pages/LandingPage";
 import UserLogin from "../pages/UserPages/UserLogin";
@@ -11,39 +10,66 @@ import Otp from "../pages/UserPages/Otp";
 import UserHome from "../pages/UserPages/UserHome";
 import { useSelector } from "react-redux";
 import AdminLogin from "../pages/AdminPages/AdminLogin";
+import AdminHome from "../pages/AdminPages/AdminHome";
+import IsloggedOutUser from "../components/IsloggedOutUser";
+import IsLoggedInUser from "../components/IsLoggedInUser";
+import UsersTable from "../pages/AdminPages/UsersTable";
 
 function AppRoutes() {
-  const { loading } = useSelector((state)=> state.loadings)
+  const { loading } = useSelector((state) => state.loadings);
+
   return (
     <div>
-       {/* loading spinner ui */}
+      {/* loading spinner ui */}
       {loading && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50 bg-black-100 bg-opacity-90">
           <div className="text-blue-500 flex justify-center items-center">
-            <svg class="animate-spin h-16 w-16 text-blue-500" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.96 7.96 0 014 12H0c0 6.627 5.373 12 12 12v-4c-3.313 0-6.292-1.29-8.544-3.544l1.414-1.414z"></path>
+            <svg
+              class="animate-spin h-16 w-16 text-blue-500"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.96 7.96 0 014 12H0c0 6.627 5.373 12 12 12v-4c-3.313 0-6.292-1.29-8.544-3.544l1.414-1.414z"
+              ></path>
             </svg>
           </div>
         </div>
       )}
-      <Toaster position="top-center"  reverseOrder={false}/>
+      <Toaster position="top-center" reverseOrder={false} />
 
-        <Routes>
-            <Route path={ServerVariables.Landing} element={<LandingPage/>}/>
+      <Routes>
+        <Route path={ServerVariables.Landing} element={<LandingPage />} />
 
-            {/* user routes */}
-            <Route path={ServerVariables.Login} element={<UserLogin/>}/>
-            <Route path={ServerVariables.Register} element={<UserRegister/>}/>
-            <Route path={ServerVariables.Otp} element={<Otp/>}/>
-            <Route path={ServerVariables.UserHome} element={<UserHome/>}/>
+        {/* user routes */}
 
+        <Route element={<IsloggedOutUser />}>  
+          <Route path={ServerVariables.Login} element={<UserLogin />} />
+          <Route path={ServerVariables.Register} element={<UserRegister />} />
+          <Route path={ServerVariables.Otp} element={<Otp />} />
+        </Route>
 
-            {/* admin routes */}
-            <Route path={ServerVariables.AdminLogin} element={<AdminLogin/>}/>
-        </Routes>
+        <Route element={<IsLoggedInUser/>}> {/* protected  */}
+          <Route path={ServerVariables.UserHome} element={<UserHome />} />
+        </Route>
+
+        {/* admin routes */}
+        <Route path={ServerVariables.AdminLogin} element={<AdminLogin />} />
+        <Route path={ServerVariables.AdminHome} element={<AdminHome />} />
+        <Route path={ServerVariables.UsersTable} element={<UsersTable />} />
+      </Routes>
     </div>
-  )
+  );
 }
 
-export default AppRoutes
+export default AppRoutes;

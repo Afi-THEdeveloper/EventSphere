@@ -48,6 +48,32 @@ exports.register = CatchAsync(async (req, res) => {
   }
 });
 
+
+
+exports.loginUser = CatchAsync(async (req,res)=>{
+    console.log(req.body)
+    const user = await User.findOne({email:req.body.email})
+    if(!user){
+        return res.json({error:'user not found'})
+    }
+    const isMatch = await bcrypt.compare(req.body.password, user.password)
+    if (!isMatch){ 
+        return res.status(400).json({error:'password is not matching'})
+    }
+
+    if(user.isBlocked){
+        return res.status(403).json({error:'Sorry, you are blocked by admin'})
+    }
+
+    if(!user.isVerified){
+      await User.findOneAndDelete({email:req.body.email})
+      return res.status(400).json({error:'Account Not Verified SignUp Again'})
+    }
+
+    const token = jwt.sign({id:user._id}, process.env.JWT_SECRET, {expiresIn:'1d'})
+    res.status(200).json({ success: "Login successful", token, user })
+})
+
 exports.VerifyOtp = CatchAsync(async (req, res) => {
   const {otp,email} = req.body
   const user = await User.findOne({ email: email });
@@ -66,30 +92,6 @@ exports.VerifyOtp = CatchAsync(async (req, res) => {
     return res.json({error:'otp expired'})
   }
 });
-
-exports.loginUser = CatchAsync(async (req,res)=>{
-    console.log(req.body)
-    const user = await User.findOne({email:req.body.email})
-    if(!user){
-        return res.json({error:'user not found'})
-    }
-    const isMatch = await bcrypt.compare(req.body.password, user.password)
-    if (!isMatch){ 
-        return res.json({error:'password is not matching'})
-    }
-
-    if(user.isBlocked){
-        return res.json({error:'Sorry, you are blocked by admin'})
-    }
-
-    if(!user.isVerified){
-      await User.findOneAndDelete({email:req.body.email})
-      return res.status(200).json({error:'Account Not Verified SignUp Again'})
-    }
-
-    const token = jwt.sign({id:user._id}, process.env.JWT_SECRET, {expiresIn:'1d'})
-    res.status(200).json({ success: "Login successful", token: token })
-})
 
 
 exports.ResendOtp = CatchAsync(async (req,res)=>{

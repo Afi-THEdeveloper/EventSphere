@@ -1,53 +1,49 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Button1 from "../../components/Button1";
 import Myh1 from "../../components/Myh1";
 import AuthInput from "../../components/AuthInput";
 import { useFormik } from "formik";
-import * as Yup from 'yup'
+import * as Yup from "yup";
 import { ServerVariables } from "../../utils/ServerVariables";
 import { userRequest } from "../../Helper/instance";
 import { apiEndPoints } from "../../utils/api";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../Redux/slices/LoadingSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { loginThunk } from "../../Redux/slices/AuthSlice";
 
 const loginSchema = Yup.object().shape({
-    email:Yup.string().email('Invalid email').required('Email is required'),
-    password:Yup.string().min(6,'Password must be atleast 6 characters').required('Password is required')
-})
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string()
+    .min(6, "Password must be atleast 6 characters")
+    .required("Password is required"),
+});
 
 function UserLogin() {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isLoading, isError, isSuccess, message, errorMsg, token } = useSelector((state) => state.Auth);
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    validationSchema:loginSchema,
+    validationSchema: loginSchema,
     onSubmit: (values) => {
-       dispatch(showLoading())
-       userRequest({
-        url:apiEndPoints.postLogin,
-        method:'post',
-        data:values
-       }).then(res=>{
-          dispatch(hideLoading())
-          if(res.data.success){
-            toast.success(res.data.success)
-            localStorage.setItem('token', res.data.token)
-            navigate(ServerVariables.UserHome)
-          }else{
-            dispatch(hideLoading())
-            toast.error(res.data.error)
-          }
-       }).catch(error=>{
-         dispatch(hideLoading())
-         toast.error(error.message)
-       })
+      dispatch(loginThunk(values))
     },
   });
+
+  useEffect(() => {
+    if(isSuccess){
+      toast.success(message)
+    } 
+    if (isError)  toast.error(errorMsg);
+  }, [isSuccess,isError]);
+
+
+  
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-screen">
@@ -64,7 +60,11 @@ function UserLogin() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
-              { formik.errors.email && formik.touched.email && <p className="text-sm font-bold text-red-600">{formik.errors.email}</p>}
+              {formik.errors.email && formik.touched.email && (
+                <p className="text-sm font-bold text-red-600">
+                  {formik.errors.email}
+                </p>
+              )}
               <AuthInput
                 name="password"
                 type="password"
@@ -73,15 +73,22 @@ function UserLogin() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
-              { formik.errors.password && formik.touched.password && <p className="text-sm font-bold text-red-500">{formik.errors.password}</p>}
-              
-              <Button1 text="Login" style={{marginTop:8}} />
-              <Link to={ServerVariables.Register} className="mt-2 h-10 w-full rounded-full px-4 text-sm font-semibold text-[#E0CDB6] bg-[#071F48] flex items-center justify-center">Signup</Link>
+              {formik.errors.password && formik.touched.password && (
+                <p className="text-sm font-bold text-red-500">
+                  {formik.errors.password}
+                </p>
+              )}
+
+              <Button1 text="Login" style={{ marginTop: 8 }} type="submit" />
+              <Link
+                to={ServerVariables.Register}
+                className="mt-2 h-10 w-full rounded-full px-4 text-sm font-semibold text-[#E0CDB6] bg-[#071F48] flex items-center justify-center"
+              >
+                Signup
+              </Link>
             </form>
           </div>
         </div>
-
-        
       </div>
     </div>
   );

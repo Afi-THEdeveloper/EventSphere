@@ -8,5 +8,8 @@ export const ServerVariables = {
   UserHome:'/UserHome',
 
   //admin routes
-  AdminLogin:'/adminLogin'
+  AdminLogin:'/adminLogin',
+  AdminHome:'/adminHome',
+  UsersTable:'/users',
+  PlansTable:'/plansTable'
 };
