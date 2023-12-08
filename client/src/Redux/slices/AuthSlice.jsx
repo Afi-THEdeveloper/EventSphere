@@ -37,8 +37,15 @@ export const AuthSlice = createSlice({
       state.isSuccess = false;
       state.errorMsg = action.payload.error;
     },
+    logout: (state) =>{
+      localStorage.removeItem('userInfo')
+      localStorage.removeItem('UserToken')
+      state.token = null
+      state.user = {}
+    }
   },
 });
+
 
 export const loginThunk = (data) => async (dispatch) => {
   try {
@@ -53,5 +60,5 @@ export const loginThunk = (data) => async (dispatch) => {
     dispatch(loginReject(error))
   }
 };
-export const { loginPending, loginSuccess, loginReject } = AuthSlice.actions;
+export const { loginPending, loginSuccess, loginReject, logout } = AuthSlice.actions;
 export default AuthSlice.reducer;

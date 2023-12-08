@@ -9,4 +9,8 @@ export const apiEndPoints = {
     postLoginAdmin: '/api/admin/verifyAdmin',
     getUsers:  'api/admin/getUsers',
     blockUser: 'api/admin/blockUser',
+    getPlans:  'api/admin/getPlans',
+    addPlan: 'api/admin/addPlan',
+    blockPlan:'api/admin/blockPlan',
+    editPlan:'api/admin/editPlan',
 }

@@ -4,20 +4,21 @@ import { useNavigate } from "react-router-dom";
 import { ServerVariables } from "../utils/ServerVariables";
 import { Fragment } from "react";
 
-const AdminNavbar = () => {
+
+const AdminNavbar = ({hover}) => {
   const navigate = useNavigate();
 
   const user = {
     name: "Tom Cook",
     email: "tom@example.com",
-    imageUrl:"/images/adminImages/pyphoto1.jpg"  };
+    imageUrl:"/images/avatar.png"  };
 
   const navigation = [
-    { name: "Home", navigation: ServerVariables.AdminHome, current: false },
-    { name: "Users", navigation: ServerVariables.UsersTable, current: true },
-    { name: "Events", navigation: "#", current: false },
-    { name: "Plans", navigation: ServerVariables.PlansTable, current: false },
-    { name: "Reports", navigation: "#", current: false },
+    { name: "Home", navigation: ServerVariables.AdminHome, current: {hover} },
+    { name: "Users", navigation: ServerVariables.UsersTable, current: {hover} },
+    { name: "Events", navigation: "#", current: {hover} },
+    { name: "Plans", navigation: ServerVariables.PlansTable, current: {hover} },
+    { name: "Reports", navigation: "#", current: {hover} },
   ];
 
   const userNavigation = [
@@ -54,7 +55,7 @@ const AdminNavbar = () => {
                           item.current
                             ? "bg-gray-900 text-white"
                             : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "rounded-md px-3 py-2 text-sm font-medium"
+                          "rounded-md px-3 py-2 text-sm font-medium cursor-pointer"
                         )}
                         aria-current={item.current ? "page" : undefined}
                       >

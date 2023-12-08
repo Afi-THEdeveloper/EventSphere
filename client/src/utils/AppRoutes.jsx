@@ -14,6 +14,9 @@ import AdminHome from "../pages/AdminPages/AdminHome";
 import IsloggedOutUser from "../components/IsloggedOutUser";
 import IsLoggedInUser from "../components/IsLoggedInUser";
 import UsersTable from "../pages/AdminPages/UsersTable";
+import PlansTable from "../pages/AdminPages/PlansTable";
+import AddPlan from "../pages/AdminPages/AddPlan";
+import EditPlan from "../pages/AdminPages/EditPlan";
 
 function AppRoutes() {
   const { loading } = useSelector((state) => state.loadings);
@@ -67,6 +70,9 @@ function AppRoutes() {
         <Route path={ServerVariables.AdminLogin} element={<AdminLogin />} />
         <Route path={ServerVariables.AdminHome} element={<AdminHome />} />
         <Route path={ServerVariables.UsersTable} element={<UsersTable />} />
+        <Route path={ServerVariables.PlansTable} element={<PlansTable />} />
+        <Route path={ServerVariables.AddPlan} element={<AddPlan/>} />
+        <Route path={ServerVariables.editPlan} element={<EditPlan/>} />
       </Routes>
     </div>
   );

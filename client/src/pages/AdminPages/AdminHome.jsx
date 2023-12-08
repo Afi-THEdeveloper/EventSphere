@@ -4,7 +4,7 @@ import AdminNavbar from '../../components/AdminNavbar'
 function AdminHome() {
   return (
     <>
-        <AdminNavbar/>
+        <AdminNavbar hover={true}/>
         
     </>
   )

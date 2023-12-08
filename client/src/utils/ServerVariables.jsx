@@ -11,5 +11,7 @@ export const ServerVariables = {
   AdminLogin:'/adminLogin',
   AdminHome:'/adminHome',
   UsersTable:'/users',
-  PlansTable:'/plansTable'
+  PlansTable:'/plansTable',
+  AddPlan:'/AddPlan',
+  editPlan:'/editPlan',
 };

@@ -32,15 +32,11 @@ function UserLogin() {
     validationSchema: loginSchema,
     onSubmit: (values) => {
       dispatch(loginThunk(values))
+      isError &&  toast.error(errorMsg);
     },
   });
 
-  useEffect(() => {
-    if(isSuccess){
-      toast.success(message)
-    } 
-    if (isError)  toast.error(errorMsg);
-  }, [isSuccess,isError]);
+ 
 
 
   
