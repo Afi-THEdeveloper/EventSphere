@@ -198,7 +198,10 @@ function EditPlan() {
           >
             Edit
           </button>
-          <div className="mt-7 w-full">
+          <button type="button" onClick={()=> window.history.back()} className="text-sm font-semibold leading-6 text-white mt-2">
+          Cancel
+         </button>
+          <div className="mt-7">
             {error && (
               <p className="text-sm font-bold text-red-600 ">{error}</p>
             )}

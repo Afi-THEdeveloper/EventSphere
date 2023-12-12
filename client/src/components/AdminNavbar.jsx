@@ -1,24 +1,35 @@
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ServerVariables } from "../utils/ServerVariables";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 
-const AdminNavbar = ({hover}) => {
+
+const AdminNavbar = () => {
   const navigate = useNavigate();
+  const [activeItem, setActiveItem] = useState("Home");
+  const location = useLocation()
+
+  useEffect(()=>{
+    if(location.state){
+      const {clicked} = location.state
+      setActiveItem(clicked)
+    }
+  },[])
+
+  
 
   const user = {
     name: "Tom Cook",
     email: "tom@example.com",
-    imageUrl:"/images/avatar.png"  };
+    imageUrl:"/images/linkedinProfile.jpg"  };
 
   const navigation = [
-    { name: "Home", navigation: ServerVariables.AdminHome, current: {hover} },
-    { name: "Users", navigation: ServerVariables.UsersTable, current: {hover} },
-    { name: "Events", navigation: "#", current: {hover} },
-    { name: "Plans", navigation: ServerVariables.PlansTable, current: {hover} },
-    { name: "Reports", navigation: "#", current: {hover} },
+    { name: "Home", navigation: ServerVariables.AdminHome,  },
+    { name: "Users", navigation: ServerVariables.UsersTable, },
+    { name: "Events", navigation: ServerVariables.eventsTable,},
+    { name: "Plans", navigation: ServerVariables.PlansTable,},
   ];
 
   const userNavigation = [
@@ -30,6 +41,10 @@ const AdminNavbar = ({hover}) => {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
+
+  
+
+
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -50,14 +65,15 @@ const AdminNavbar = ({hover}) => {
                     {navigation.map((item) => (
                       <a
                         key={item.name}
-                        onClick={() => navigate(item.navigation)}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "rounded-md px-3 py-2 text-sm font-medium cursor-pointer"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
+                        onClick={() =>{
+                           navigate(item.navigation, {state:{clicked:item.name}})
+                        }}
+                        className={
+                            activeItem === item.name
+                            ? "bg-blue-900 text-white rounded-md px-3 py-2 text-sm font-medium"   
+                            : "text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium cursor-pointer"
+                        }
+                        aria-current={activeItem ? "page" : undefined}  
                       >
                         {item.name}
                       </a>
@@ -67,7 +83,7 @@ const AdminNavbar = ({hover}) => {
               </div>
               <div className="hidden md:block">
                 <div className="ml-4 flex items-center md:ml-6">
-                  <button
+                  <button 
                     type="button"
                     className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                   >

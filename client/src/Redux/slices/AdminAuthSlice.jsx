@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { apiEndPoints } from "../../utils/api";
-import { userRequest } from "../../Helper/instance";
-import {toast} from 'react-hot-toast'
+import { adminRequest } from "../../Helper/instance";
+import toast from "react-hot-toast";
 import { hideLoading, showLoading } from "./LoadingSlice";
 
 const initialState = {
@@ -10,12 +10,12 @@ const initialState = {
   isSuccess: false,
   errorMsg: "",
   message: "",
-  user: JSON.parse(localStorage.getItem("userInfo")) || {},
-  token: JSON.parse(localStorage.getItem("UserToken")) || null,
+  admin: JSON.parse(localStorage.getItem("adminInfo")) || {},
+  token: JSON.parse(localStorage.getItem("adminToken")) || null,
 };
 
-export const AuthSlice = createSlice({
-  name: "Auth",
+export const AdminAuthSlice = createSlice({
+  name: "Admin Auth",
   initialState,
   reducers: {
     loginPending: (state) => {
@@ -25,9 +25,9 @@ export const AuthSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = true;
       state.isError = false;
-      state.user = action.payload.user;
-      localStorage.setItem("userInfo", JSON.stringify(action.payload.user));
-      localStorage.setItem("UserToken", JSON.stringify(action.payload.token));
+      state.admin = action.payload.admin;
+      localStorage.setItem("adminInfo", JSON.stringify(action.payload.admin));
+      localStorage.setItem("adminToken", JSON.stringify(action.payload.token));
       state.token = action.payload.token;
       state.message = action.payload.success;
     },
@@ -38,20 +38,20 @@ export const AuthSlice = createSlice({
       state.errorMsg = action.payload.error;
     },
     logout: (state) => {
-      localStorage.removeItem("userInfo");
-      localStorage.removeItem("UserToken");
+      localStorage.removeItem("adminInfo");
+      localStorage.removeItem("adminToken");
       state.token = null;
       state.user = {};
     },
   },
 });
 
-export const loginThunk = (data) => async (dispatch) => {
+export const AdminLoginThunk = (data) => async (dispatch) => {
   try {
     dispatch(loginPending());
     dispatch(showLoading())
-    const res = await userRequest({
-      url: apiEndPoints.postLogin,
+    const res = await adminRequest({
+      url: apiEndPoints.postLoginAdmin,
       method: "post",
       data: data,
     });
@@ -66,10 +66,10 @@ export const loginThunk = (data) => async (dispatch) => {
     
   } catch (error) {
      dispatch(hideLoading())
-     toast.error('No response received from the server')
-     dispatch(loginReject({ error: 'No response received from the server' }));
+     toast.error('request failed')
+     dispatch(loginReject({ error: 'No response received from the server.' }));
   }
 };
-export const { loginPending, loginSuccess, loginReject, logout } =
-  AuthSlice.actions;
-export default AuthSlice.reducer;
+
+export const { loginPending, loginSuccess, loginReject, logout } = AdminAuthSlice.actions;
+export default AdminAuthSlice.reducer;

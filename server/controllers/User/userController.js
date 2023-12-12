@@ -58,16 +58,16 @@ exports.loginUser = CatchAsync(async (req,res)=>{
     }
     const isMatch = await bcrypt.compare(req.body.password, user.password)
     if (!isMatch){ 
-        return res.status(400).json({error:'password is not matching'})
+        return res.status(200).json({error:'password is not matching'})
     }
 
     if(user.isBlocked){
-        return res.status(403).json({error:'Sorry, you are blocked by admin'})
+        return res.status(200).json({error:'Sorry, you are blocked by admin'})
     }
 
     if(!user.isVerified){
       await User.findOneAndDelete({email:req.body.email})
-      return res.status(400).json({error:'Account Not Verified SignUp Again'})
+      return res.status(200).json({error:'Account Not Verified SignUp Again'})
     }
 
     const token = jwt.sign({id:user._id}, process.env.JWT_SECRET, {expiresIn:'1d'})
@@ -107,7 +107,7 @@ exports.ResendOtp = CatchAsync(async (req,res)=>{
   const options = {
     from: process.env.EMAIL,
     to: req.body.email,
-    subject: "EventSphere verification otp",
+    subject: "EventSphere verification otp for User",
     html: `<center> <h2>Verify Your Email </h2> <br> <h5>OTP :${newOtp} </h5><br><p>This otp is only valid for 1 minutes only</p></center>`,
   };
   await OtpMailer.sendMail(options)

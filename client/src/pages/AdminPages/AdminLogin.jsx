@@ -6,11 +6,9 @@ import { useFormik } from "formik";
 import * as Yup from 'yup'
 import AuthInput from '../../components/AuthInput';
 import { ServerVariables } from '../../utils/ServerVariables';
-import { useDispatch } from 'react-redux';
-import { adminRequest } from '../../Helper/instance';
-import { hideLoading, showLoading } from '../../Redux/slices/LoadingSlice';
-import { apiEndPoints } from '../../utils/api';
+import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
+import { AdminLoginThunk } from '../../Redux/slices/AdminAuthSlice';
 
 const loginSchema = Yup.object().shape({
     email:Yup.string().email('Invalid email').required('Email is required'),
@@ -27,25 +25,7 @@ function AdminLogin() {
       },
       validationSchema:loginSchema,
       onSubmit: (values) => {
-         dispatch(showLoading())
-         adminRequest({
-          url:apiEndPoints.postLoginAdmin,
-          method:'post',
-          data:values
-         }).then(res=>{
-            dispatch(hideLoading())
-            if(res.data.success){
-              toast.success(res.data.success)
-              localStorage.setItem('adminToken', res.data.token)
-              navigate(ServerVariables.AdminHome)
-            }else{
-              dispatch(hideLoading())
-              toast.error(res.data.error)
-            }
-         }).catch(error=>{
-           dispatch(hideLoading())
-           toast.error(error.message)
-         })
+         dispatch(AdminLoginThunk(values))
       },
     });
   return (

@@ -78,6 +78,10 @@ const userSchema = new mongoose.Schema({
        media:{
         type:String,
         required:true
+       },
+       likes:{
+        type:Number,
+        default:0
        }
     }
   ],
@@ -85,7 +89,7 @@ const userSchema = new mongoose.Schema({
     {
         jobPost:{
             type:mongoose.Schema.Types.ObjectId,
-            ref:'jobPost',
+            ref:'Event.jobPost',
             required:true
         }
     }
@@ -94,13 +98,16 @@ const userSchema = new mongoose.Schema({
     {
         jobPost:{
             type:mongoose.Schema.Types.ObjectId,
-            ref:'jobPost',
+            ref:'Event.jobPost',
             required:true
         }
     }
   ],
  
    
+},
+{
+  timestamps:true
 });
 
 const userModel = mongoose.model("user", userSchema);

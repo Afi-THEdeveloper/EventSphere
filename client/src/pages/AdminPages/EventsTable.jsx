@@ -1,47 +1,50 @@
 import React, { useEffect, useState } from "react";
 import AdminNavbar from "../../components/AdminNavbar";
-import { useDispatch } from "react-redux";
-import { hideLoading, showLoading } from "../../Redux/slices/LoadingSlice";
+import { useNavigate } from "react-router-dom";
+import { ServerVariables } from "../../utils/ServerVariables";
 import { adminRequest } from "../../Helper/instance";
 import { apiEndPoints } from "../../utils/api";
-import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { hideLoading, showLoading } from "../../Redux/slices/LoadingSlice";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 import Search1 from "../../components/Search1";
 
 
-function UsersTable() {
-  const [users, setUsers] = useState([]);
-  const [searched, setSearched] = useState("");
+function EventsTable() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searched, setSearched] = useState("");
+  const [events, setEvents] = useState([]);
   useEffect(() => {
-    getUsers();
+    getEvents();
   }, []);
 
-  const getUsers = () => {
+  const getEvents = async () => {
     dispatch(showLoading());
     adminRequest({
-      url: apiEndPoints.getUsers,
+      url: apiEndPoints.getEvents,
       method: "get",
     })
       .then((res) => {
         dispatch(hideLoading());
         if (res.data.success) {
-          setUsers(res.data.users);
+          setEvents(res.data.events);
         }
       })
       .catch((err) => {
-        console.log("no users", err);
-        toast.error("something went wrong");
+        dispatch(hideLoading());
+        console.log(err);
       });
   };
 
-  const blockUser = async (id) => {
-    const isBlocked = users.find((user) => user._id === id)?.isBlocked;
+  const blockEvent = async (id) => {
+    const isBlocked = events.find((plan) => plan._id === id)?.isBlocked;
     const result = await Swal.fire({
       title: isBlocked ? "Unblock Confirmation" : "Block Confirmation",
       text: isBlocked
-        ? "Are you sure you want to Unblock this User?"
-        : "Are you sure you want to Block this User?",
+        ? "Are you sure you want to Unblock this plan?"
+        : "Are you sure you want to Block this plan?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -53,35 +56,33 @@ function UsersTable() {
       dispatch(showLoading());
 
       adminRequest({
-        url: apiEndPoints.blockUser,
+        url: apiEndPoints.blockEvent,
         method: "post",
         data: { id: id },
       }).then((res) => {
         dispatch(hideLoading());
         if (res.data.success) {
           toast.success(res.data.success);
-          getUsers();
+          getEvents();
         } else {
           toast.error(res.data.error);
         }
       });
     }
   };
-  
 
-  
 
   return (
     <>
       <AdminNavbar />
       <div className="min-h-full">
         <header className="bg-black shadow">
-          <div className="mx-auto max-w-7xl px-4 py-6 flex users-center justify-between sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-white">
-              USERS
-            </h1>
+          <div className="mx-auto max-w-7xl px-4 py-6 flex items-center justify-between sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold tracking-tight text-white">
+              EVENTS 
+            </h2>
             <div className="relative">
-              <Search1 search='Search User' value={searched}  onChange={(e)=> setSearched(e.target.value)}/>
+              <Search1 search='Search Event' value={searched}  onChange={(e)=> setSearched(e.target.value)}/>
             </div>
           </div>
         </header>
@@ -94,62 +95,59 @@ function UsersTable() {
                 <thead className="bg-gray-400">
                   <tr>
                     <th className="border-b p-4">Sl No:</th>
-                    <th className="border-b p-4">profile</th>
-                    <th className="border-b p-4">Name</th>
-                    <th className="border-b p-4">Mobile</th>
+                    <th className="border-b p-4">Event</th>
                     <th className="border-b p-4">Email</th>
+                    <th className="border-b p-4">Phone</th>
+                    <th className="border-b p-4">Plan expiry</th>
                     <th className="border-b p-4">Verified</th>
                     <th className="border-b p-4">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                 { users.length? users.filter((item)=>{
-                   return searched.toLowerCase() === "" ? item
-                    : item.username.toLowerCase().includes(searched) ||  
+                  {events.filter((item)=>{
+                    return searched.toLowerCase() === "" ? item
+                    : item.title.toLowerCase().includes(searched) ||  
                       item.phone.toString().includes(searched)       ||
-                      item.email.toLowerCase().includes(searched)
-                 }).map((user, index) => {
+                      item.email.toLowerCase().includes(searched)    
+                  }).map((event, index) => {
                     return (
-                      <tr key={user._id}>
+                      <tr key={event._id}>
                         <td className="border-b p-4 text-center">
                           {index + 1}
                         </td>
                         <td className="border-b p-4 text-center">
-                          <img
-                            className="h-10 w-10 rounded-full"
-                            src="/images/avatar.png"
-                            alt="image"
-                          />
+                          {event.title}
                         </td>
                         <td className="border-b p-4 text-center">
-                          {user.username}
+                          {event.email}
                         </td>
                         <td className="border-b p-4 text-center">
-                          {user.phone}
+                          {event.phone}
                         </td>
                         <td className="border-b p-4 text-center">
-                          {user.email}
+                          {event.selectedPlan? event.selectedPlan.expiry.toDateString() : 'No plan'}
                         </td>
                         <td className="border-b p-4 text-center">
-                          {user.isVerified? 'Yes':'No'}
+                          {event.isVerified ? 'Yes' : 'No'}
                         </td>
                         <td className="text-center">
+
                           <button
                             className={`${
-                              user.isBlocked ? "bg-red-500" : "bg-green-500"
+                              event.isBlocked ?"bg-red-500" : "bg-green-500"
                             } text-white px-2 py-1 rounded-full w-20 md:w-24 h-8 md:h-10`}
                             onClick={() => {
-                              blockUser(user._id);
+                              blockEvent(event._id);
                             }}
                           >
-                            {user.isBlocked ? "blocked" : "Block"}
+                            {event.isBlocked ? "Blocked" : "Block"}
                           </button>
                         </td>
                       </tr>
                     );
-                  }) : <h1 className="text-center text-red-500">No users</h1> }
+                  })}
                 </tbody>
-              </table> 
+              </table>
             </div>
           </div>
         </main>
@@ -158,4 +156,4 @@ function UsersTable() {
   );
 }
 
-export default UsersTable;
+export default EventsTable;

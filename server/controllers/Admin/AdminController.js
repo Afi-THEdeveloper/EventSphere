@@ -1,8 +1,10 @@
 const Admin = require("../../models/AdminModel");
 const User = require('../../models/UserModel')
 const Plan  = require('../../models/PlanModel')
+const Event = require('../../models/EventModel')
 const CatchAsync = require("../../util/CatchAsync");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken')
 
 
 const securePassword = async (password) => {
@@ -18,12 +20,13 @@ exports.verifyAdminLogin = CatchAsync(async (req, res) => {
   if (admin) {
     const passwordMatch = await bcrypt.compare(password, admin.password);
     if (passwordMatch) {
-        return res.status(200).json({success:'Login successfull'})
+        const token = jwt.sign({id:admin._id}, process.env.JWT_SECRET, {expiresIn:'1d'})
+        return res.status(200).json({success:'Login successfull',token,admin})
     } else {
         return res.status(200).json({error:'Incorrect password'})
     }
   } else {
-     return res.status(200).json({error:'Invalid email'})
+     return res.status(200).json({error:'email not found'})   
   }
 });
 
@@ -116,6 +119,27 @@ exports.editPlan = CatchAsync(async (req,res)=>{
   } else {
     return res.json({ error: "updating failed" });
   }
+})
+
+
+exports.getEvents = CatchAsync(async (req,res)=>{
+  const events = await Event.find({})
+   if(events){
+    return res.status(200).json({success:'ok',events})
+   }
+}) 
+
+exports.blockEvent = CatchAsync(async (req,res)=>{
+  console.log(req.body)
+  const event = await Event.findById(req.body.id)
+    console.log(event)
+    event.isBlocked = !event.isBlocked
+    await event.save()
+    if(event.isBlocked){
+      return res.status(200).json({success:`${event.title} is blocked`})
+    }else{
+      return res.status(200).json({success:`${event.title} is unblocked`})
+    }
 })
 
 

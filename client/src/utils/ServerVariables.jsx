@@ -14,4 +14,14 @@ export const ServerVariables = {
   PlansTable:'/plansTable',
   AddPlan:'/AddPlan',
   editPlan:'/editPlan',
+  eventsTable:'/events',
+
+
+
+  //event routes
+  eventLogin : '/eventLogin',
+  eventRegister: '/eventRegister',
+  eventOtp:'/eventOtp',
+  eventHome:'/eventHome',
 };
+

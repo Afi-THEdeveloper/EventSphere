@@ -9,11 +9,14 @@ import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../../Redux/slices/LoadingSlice";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import Search1 from "../../components/Search1";
 
 function PlansTable() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [plans, setPlans] = useState([]);
+  const [searched, setSearched] = useState("");
+
   useEffect(() => {
     getPlans();
   }, []);
@@ -84,6 +87,7 @@ function PlansTable() {
             <h2 className="text-3xl font-bold tracking-tight text-white">
               SUBSCRIPTION PLANS
             </h2>
+            <Search1 search='Search Plan' value={searched}  onChange={(e)=> setSearched(e.target.value)}/>
             <Button2
               text="Add Plan"
               onClick={() => navigate(ServerVariables.AddPlan)}
@@ -107,7 +111,13 @@ function PlansTable() {
                   </tr>
                 </thead>
                 <tbody>
-                  {plans.map((plan, index) => {
+                  {plans.filter((item)=>{   
+                     return searched.toLowerCase() === "" ? item
+                     : item.name.toLowerCase().includes(searched) ||  
+                       item.duration.toString().includes(searched)       ||
+                       item.amount.toString().includes(searched)       ||
+                       item.description.toLowerCase().includes(searched)
+                  }).map((plan, index) => {
                     return (
                       <tr key={plan._id}>
                         <td className="border-b p-4 text-center">
@@ -130,7 +140,7 @@ function PlansTable() {
                           <button onClick={()=> GetEditPlan(plan._id)} className="text-white bg-gray-500 mr-2 mb-2 px-2 py-1 rounded-full w-20 md:w-24 h-8 md:h-10">Edit</button>
                           <button
                             className={`${
-                              plan.isDeleted ? "bg-green-500" : "bg-red-500"
+                              plan.isDeleted ? "bg-red-500" : "bg-green-500"
                             } text-white px-2 py-1 rounded-full w-20 md:w-24 h-8 md:h-10`}
                             onClick={() => {
                               blockPlan(plan._id);

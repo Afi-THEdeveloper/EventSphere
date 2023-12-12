@@ -17,6 +17,15 @@ import UsersTable from "../pages/AdminPages/UsersTable";
 import PlansTable from "../pages/AdminPages/PlansTable";
 import AddPlan from "../pages/AdminPages/AddPlan";
 import EditPlan from "../pages/AdminPages/EditPlan";
+import EventLogin from "../pages/EventPages/EventLogin";
+import EventRegister from "../pages/EventPages/EventRegister";
+import EventOtp from "../pages/EventPages/EventOtp";
+import EventHome from "../pages/EventPages/EventHome";
+import IsLoggedEvent from "../components/IsLoggedEvent";
+import IsLoggedOutEvent from "../components/IsLoggedOutEvent";
+import IsAdminLogged from "../components/IsAdminLogged";
+import IsAdminLoggedOut from "../components/IsAdminLoggedOut";
+import EventsTable from "../pages/AdminPages/EventsTable";
 
 function AppRoutes() {
   const { loading } = useSelector((state) => state.loadings);
@@ -56,23 +65,48 @@ function AppRoutes() {
 
         {/* user routes */}
 
-        <Route element={<IsloggedOutUser />}>  
+        <Route element={<IsloggedOutUser />}>
           <Route path={ServerVariables.Login} element={<UserLogin />} />
           <Route path={ServerVariables.Register} element={<UserRegister />} />
           <Route path={ServerVariables.Otp} element={<Otp />} />
         </Route>
 
-        <Route element={<IsLoggedInUser/>}> {/* protected  */}
+        <Route element={<IsLoggedInUser />}>
+          {" "}
+          {/* protected  */}
           <Route path={ServerVariables.UserHome} element={<UserHome />} />
         </Route>
 
         {/* admin routes */}
-        <Route path={ServerVariables.AdminLogin} element={<AdminLogin />} />
-        <Route path={ServerVariables.AdminHome} element={<AdminHome />} />
-        <Route path={ServerVariables.UsersTable} element={<UsersTable />} />
-        <Route path={ServerVariables.PlansTable} element={<PlansTable />} />
-        <Route path={ServerVariables.AddPlan} element={<AddPlan/>} />
-        <Route path={ServerVariables.editPlan} element={<EditPlan/>} />
+        <Route element={<IsAdminLogged/>}>
+          <Route path={ServerVariables.AdminHome} element={<AdminHome />} />
+          <Route path={ServerVariables.UsersTable} element={<UsersTable />} />
+          <Route path={ServerVariables.PlansTable} element={<PlansTable />} />
+          <Route path={ServerVariables.AddPlan} element={<AddPlan />} />
+          <Route path={ServerVariables.editPlan} element={<EditPlan />} />
+          <Route path={ServerVariables.eventsTable} element={<EventsTable />} />
+        </Route>
+
+        <Route element={<IsAdminLoggedOut/>}>
+          <Route path={ServerVariables.AdminLogin} element={<AdminLogin />} />
+        </Route>
+        
+
+
+
+        {/* event Routes */}
+
+      <Route element={<IsLoggedEvent />}>
+          <Route path={ServerVariables.eventHome} element={<EventHome />} />
+      </Route>
+
+      <Route element={<IsLoggedOutEvent/>}>
+        <Route path={ServerVariables.eventLogin} element={<EventLogin />} />
+        <Route path={ServerVariables.eventRegister} element={<EventRegister />}/>
+        <Route path={ServerVariables.eventOtp} element={<EventOtp />} />
+      </Route>
+
+
       </Routes>
     </div>
   );

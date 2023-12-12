@@ -74,6 +74,74 @@ function AddPlan() {
     })
   };
 
+
+  const renderDurationOptions = () => {
+    switch (name.toLowerCase()) {
+      case "weekly":
+        return (
+          <select
+            id="duration"
+            name="duration"
+            autoComplete="duration-name"
+            onChange={(e) => setDuration(e.target.value)}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+          >
+            <option>Choose</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        );
+      case "monthly":
+        return (
+          <select
+            id="duration"
+            name="duration"
+            autoComplete="duration-name"
+            onChange={(e) => setDuration(e.target.value)}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+          >
+            <option>Choose</option>
+            {Array.from({ length: 12 }, (_, index) => (
+              <option key={index + 1} value={index + 1}>
+                {index + 1}
+              </option>
+            ))}
+          </select>
+        );
+      case "yearly":
+        return (
+          <select
+            id="duration"
+            name="duration"
+            autoComplete="duration-name"
+            onChange={(e) => setDuration(e.target.value)}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+          >
+            <option>Choose</option>
+            {Array.from({ length: 3 }, (_, index) => (
+              <option key={index + 1} value={index + 1}>
+                {index + 1}
+              </option>
+            ))}
+          </select>
+        );
+      default:
+        return (
+          <select
+            disabled
+            id="duration"
+            name="duration"
+            autoComplete="duration-name"
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+          >
+            <option>Choose</option>
+          </select>
+        );
+    }
+  };
+
   return (
     <>
       <AdminNavbar />
@@ -94,14 +162,18 @@ function AddPlan() {
               Plan name
             </label>
             <div className="mt-2">
-              <input
-                type="text"
-                name="first-name"
-                id="first-name"
-                autoComplete="given-name"
+            <select
+                id="duration"
+                name="duration"
+                autoComplete="duration-name"
                 onChange={(e) => setName(e.target.value)}
-                className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm p-4 sm:leading-6"
-              />
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+              >
+                <option>Choose</option>
+                <option>weekly</option>
+                <option>monthly</option>
+                <option>yearly</option>
+              </select>
             </div>
           </div>
 
@@ -148,31 +220,9 @@ function AddPlan() {
               htmlFor="duration"
               className="block text-sm font-medium leading-6 text-white"
             >
-              Choose Duration (Months)
+              Choose Duration {name && `no of (${name})` }
             </label>
-            <div className="mt-2">
-              <select
-                id="duration"
-                name="duration"
-                autoComplete="duration-name"
-                onChange={(e) => setDuration(e.target.value)}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-              >
-                <option>Choose</option>
-                <option value={duration}>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-                <option>11</option>
-                <option>12</option>
-              </select>
-            </div>
+            <div className="mt-2">{renderDurationOptions()} </div>
           </div>
           <button
             onClick={handleAddPlan}
@@ -180,6 +230,9 @@ function AddPlan() {
           >
             Add
           </button>
+          <button type="button" onClick={()=> window.history.back()} className="text-sm font-semibold leading-6 text-white mt-2">
+          Cancel
+         </button>
           <div className="mt-7 w-full">
             {error && (
               <p className="text-sm font-bold text-red-600 ">{error}</p>

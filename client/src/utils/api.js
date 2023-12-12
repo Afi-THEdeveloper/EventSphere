@@ -13,4 +13,12 @@ export const apiEndPoints = {
     addPlan: 'api/admin/addPlan',
     blockPlan:'api/admin/blockPlan',
     editPlan:'api/admin/editPlan',
+    getEvents:'api/admin/getEvents',
+    blockEvent:'api/admin/blockEvent',
+
+    //event end points
+    postEventRegisterData : 'api/event/registerEvent',
+    postEventRegisterOtp  : 'api/event/verifyEventOtp',
+    postEventResendOtp : 'api/event/ResendOtp',
+    postEventLogin : 'api/event/verifyEventLogin',
 }
