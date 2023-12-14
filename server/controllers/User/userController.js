@@ -54,7 +54,7 @@ exports.loginUser = CatchAsync(async (req,res)=>{
     console.log(req.body)
     const user = await User.findOne({email:req.body.email})
     if(!user){
-        return res.json({error:'user not found'})
+        return res.status(200).json({error:'user not found'})
     }
     const isMatch = await bcrypt.compare(req.body.password, user.password)
     if (!isMatch){ 
@@ -71,8 +71,11 @@ exports.loginUser = CatchAsync(async (req,res)=>{
     }
 
     const token = jwt.sign({id:user._id}, process.env.JWT_SECRET, {expiresIn:'1d'})
+    delete user.password
     res.status(200).json({ success: "Login successful", token, user })
 })
+
+
 
 exports.VerifyOtp = CatchAsync(async (req, res) => {
   const {otp,email} = req.body
@@ -83,6 +86,7 @@ exports.VerifyOtp = CatchAsync(async (req, res) => {
   if(Date.now() - generatedAt <= 30 * 1000){
     if(otp === user.otp.code) {
       user.isVerified = true
+      user.otp.code = ''
       await user.save()
       return res.status(200).json({ success: "user registered successfully" });
     } else {

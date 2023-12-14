@@ -59,6 +59,7 @@ const securePassword = async (password) => {
     if(Date.now() - generatedAt <= 30 * 1000){
       if(otp === event.otp.code) {
         event.isVerified = true
+        event.otp.code = ''
         await event.save()
         return res.status(200).json({ success: "event registered successfully" });
       } else {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import Button1 from "../../components/Button1";
 import Myh1 from "../../components/Myh1";
@@ -9,6 +9,7 @@ import { ServerVariables } from "../../utils/ServerVariables";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { loginThunk } from "../../Redux/slices/AuthSlice";
+import { AuthContext } from "../../../Contexts/AuthContext";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -20,7 +21,8 @@ const loginSchema = Yup.object().shape({
 function UserLogin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLoading, isError, isSuccess, message, errorMsg, token } = useSelector((state) => state.Auth);
+  const { isLoading, isError, isSuccess, message, errorMsg, token } =
+    useSelector((state) => state.Auth);
 
   const formik = useFormik({
     initialValues: {
@@ -29,14 +31,9 @@ function UserLogin() {
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
-      dispatch(loginThunk(values))
+      dispatch(loginThunk(values));
     },
   });
-
- 
-
-
-  
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-screen">

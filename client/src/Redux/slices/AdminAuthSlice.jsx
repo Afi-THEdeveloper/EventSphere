@@ -4,6 +4,7 @@ import { adminRequest } from "../../Helper/instance";
 import toast from "react-hot-toast";
 import { hideLoading, showLoading } from "./LoadingSlice";
 
+
 const initialState = {
   isLoading: false,
   isError: false,
@@ -70,6 +71,7 @@ export const AdminLoginThunk = (data) => async (dispatch) => {
      dispatch(loginReject({ error: 'No response received from the server.' }));
   }
 };
+
 
 export const { loginPending, loginSuccess, loginReject, logout } = AdminAuthSlice.actions;
 export default AdminAuthSlice.reducer;

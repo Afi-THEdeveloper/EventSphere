@@ -6,7 +6,7 @@ import { ServerVariables } from "../utils/ServerVariables";
 function IsLoggedInUser() {
   const { token } = useSelector((state) => state.Auth);
   return (
-    token ? <Outlet /> : <Navigate to={ServerVariables.Login} />
+    token ? <Outlet/> : <Navigate to={ServerVariables.Login} />
   )
 }
 
