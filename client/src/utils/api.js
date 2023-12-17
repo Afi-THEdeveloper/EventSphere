@@ -23,4 +23,7 @@ export const apiEndPoints = {
     postEventLogin : 'api/event/verifyEventLogin',
     updateEventProfile:'api/event/updateEventProfile',
     updateEvent:'api/event/updateEvent',
+    addPost:'api/event/addPost',
+    deleteEventPost:'api/event/deletePost',
 }
+

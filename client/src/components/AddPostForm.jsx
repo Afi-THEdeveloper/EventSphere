@@ -7,10 +7,10 @@ import { eventRequest } from "../Helper/instance";
 import { apiEndPoints } from "../utils/api";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { upadteEvent } from "../Redux/slices/EventAuthSlice";
+import { updateEvent } from "../Redux/slices/EventAuthSlice";
 import { ServerVariables } from "../utils/ServerVariables";
 import { useNavigate } from "react-router-dom";
-import ErrorText from "./ErrorText";
+import ErrorStyle from "./ErrorStyle";
 import ImageCrop from "./ImageCrop";
 import { hideLoading, showLoading } from "../Redux/slices/LoadingSlice";
 
@@ -55,7 +55,7 @@ function AddPostForm({ title }) {
       dispatch(hideLoading())
       if(res.data.success){
         toast.success(res.data.success)
-        dispatch(upadteEvent(res.data.event))
+        dispatch(updateEvent(res.data.event))
         navigate(ServerVariables.eventProfile)
       }else{
         toast.error(res.data.error)
@@ -84,7 +84,7 @@ function AddPostForm({ title }) {
             onChange={(e) => setDescription(e.target.value)}
           />
           <ImageCrop onNewImageUrl={addCroppedImg} />
-          {error && <ErrorText error={error} />}
+          {error && <ErrorStyle error={error} />}
 
           <div className="text-center">
             <Button1

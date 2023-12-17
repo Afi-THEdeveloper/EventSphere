@@ -29,6 +29,7 @@ import EventsTable from "../pages/AdminPages/EventsTable";
 import EventProfile from "../pages/EventPages/EventProfile";
 import EditEventProfile from "../pages/EventPages/EditEventProfile";
 import EditEvent from "../pages/EventPages/EditEvent";
+import AddPost from "../pages/EventPages/AddPost";
 
 function AppRoutes() {
   const { loading } = useSelector((state) => state.loadings);
@@ -104,6 +105,7 @@ function AppRoutes() {
           <Route path={ServerVariables.eventProfile} element={<EventProfile />} />
           <Route path={ServerVariables.editProfileImage} element={<EditEventProfile />} />
           <Route path={ServerVariables.editEvent} element={<EditEvent />} />
+          <Route path={ServerVariables.addPost} element={<AddPost />} />
       </Route>
 
       <Route element={<IsLoggedOutEvent/>}>

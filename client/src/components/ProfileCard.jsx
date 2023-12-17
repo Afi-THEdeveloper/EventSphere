@@ -15,7 +15,7 @@ function ProfileCard({ event }) {
               <div className="relative">
                 <img
                   src={`http://localhost:5000/EventImages/${event.profile}`}
-                  className="shadow-xl rounded-full align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-[150px] border-2 border-[#E0CDB6]"
+                  className="shadow-xl rounded-full align-middle absolute -m-16 -ml-20 lg:-ml-16 max-w-[150px]  border-2 border-[#E0CDB6]"
                   alt=""
                 />
               </div>
