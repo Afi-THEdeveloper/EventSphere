@@ -26,7 +26,9 @@ const securePassword = async (password) => {
         title:req.body.eventName,
         email: req.body.email,
         ownerName:req.body.Ownername,
+        place:req.body.place,
         phone: req.body.phone,
+        altPhone:req.body.altPhone,
         services:req.body.services,
         officeAddress:req.body.officeAddress,
         password: secPassword,
@@ -121,5 +123,15 @@ const securePassword = async (password) => {
     res.status(200).json({ success: "Login successful", token, event })
 })
 
+
+
+exports.updateEventProfile = CatchAsync(async (req,res)=>{
+  const event = await Event.findById(req.eventId)
+  console.log(event)
+
+  event.profile = req.body.profile
+  await event.save()
+  return res.status(200).json({success:'profile updated successfully', event})
+})
 
 

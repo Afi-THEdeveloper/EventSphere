@@ -21,11 +21,23 @@ function EventRegister() {
       .required("Event name is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
     phone: Yup.number()
-      .min(10, "invalid number")
-      .required("Phone number is required"),
+    .typeError('Invalid number') // Handles non-numeric input
+    .positive('Phone number must be a positive number') // Handles negative numbers
+    .integer('Phone number must be an integer') // Handles non-integer input
+    .test('len', 'Phone number must be exactly 10 characters', (val) => val && val.toString().length === 10)
+    .required('Phone number is required'),
+     altPhone: Yup.number()
+    .typeError('Invalid number') // Handles non-numeric input
+    .positive('Phone number must be a positive number') // Handles negative numbers
+    .integer('Phone number must be an integer') // Handles non-integer input
+    .test('len', 'Phone number must be exactly 10 characters', (val) => val && val.toString().length === 10)
+    .required('Phone number is required'),
     Ownername:Yup.string()
       .min(3,'Owner name must be atleast 3 characters')  
       .required('owner name is required'),
+    place:Yup.string()
+      .min(4,'place must be atleast 4 characters')  
+      .required('place is required'),
     services:Yup.string()
       .min(10,'services must be atleast 10 characters')  
       .required('services is required'),
@@ -44,9 +56,11 @@ function EventRegister() {
       eventName: "",
       Ownername:"",
       email: "",
+      place:'',
       services:"",
       officeAddress:"",
       phone: "",
+      altPhone:'',
       password: "",
     },
     validationSchema: registerSchema,
@@ -109,6 +123,19 @@ function EventRegister() {
               </p>
             )}
             <AuthInput
+              name="place"
+              type="text"
+              placeholder="place"
+              value={formik.values.place}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.errors.place && formik.touched.place && (
+              <p className="text-sm font-bold text-red-500">
+                {formik.errors.place}
+              </p>
+            )}
+            <AuthInput
               name="email"
               type="email"
               placeholder="Email"
@@ -134,6 +161,21 @@ function EventRegister() {
                 {formik.errors.phone}
               </p>
             )}
+            <AuthInput
+              name="altPhone"
+              type="number"
+              placeholder="Alternate Phone"
+              value={formik.values.altPhone}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            {formik.errors.altPhone && formik.touched.altPhone && (
+              <p className="text-sm font-bold text-red-500">
+                {formik.errors.altPhone}
+              </p>
+            )}
+
+
             <textarea
               className="text-[#85ACEF] block w-full rounded-xl p-3 bg-[#1E1E1E] border-2  border-blue-950 mt-1"
               name="services"

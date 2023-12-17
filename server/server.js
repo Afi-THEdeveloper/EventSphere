@@ -20,12 +20,11 @@ app.use(
 app.use(helmet())
 app.use(helmet.crossOriginResourcePolicy({policy:"cross-origin"}))
 app.use(morgan("common"))
-app.use(bodyParser.json({limit:"30mb",extended:true}))
-app.use(bodyParser.urlencoded({limit:'30mb',extended:true}))
-app.use("/assets", express.static(path.join(__dirname,'public/assets')))
+app.use(express.urlencoded({extended:true}))
+app.use(express.static(path.join(__dirname, 'public/assets')))
 // to destructure json type data from user as request
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
 
 
 
@@ -38,17 +37,7 @@ const adminRoutes = require("./routes/AdminRoutes");
 app.use("/api/admin", adminRoutes);
 
 
-// file storage
-const storage = multer.diskStorage({
-  destination:function (req,file,cb){
-    cb(null,"public/assets")
-  },
-  filename:function (req,file,cb){
-    cb(null, file.originalname)
-  }
-})
 
-const upload = multer({storage})
 
 
 const port = process.env.PORT || 5000;

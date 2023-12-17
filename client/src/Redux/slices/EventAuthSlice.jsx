@@ -39,6 +39,10 @@ const initialState = {
         state.isSuccess = false;
         state.errorMsg = action.payload.error;
       },
+      updateEvent: (state,action)=>{
+        state.event = action.payload;
+        localStorage.setItem('eventInfo', JSON.stringify(action.payload))
+      },
       logout: (state) =>{
         localStorage.removeItem('eventInfo')
         localStorage.removeItem('eventToken')
@@ -68,6 +72,6 @@ const initialState = {
       dispatch(loginReject(error))
     }
   };
-  export const { loginPending, loginSuccess, loginReject, logout } = EventAuthSlice.actions;
+  export const { loginPending, loginSuccess, loginReject,updateEvent, logout } = EventAuthSlice.actions;
   export default EventAuthSlice.reducer;
   

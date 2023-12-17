@@ -7,9 +7,10 @@ import { eventRequest } from "../Helper/instance";
 import { apiEndPoints } from "../utils/api";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { upadteEvent } from "../Redux/slices/EventAuthSlice";
+import { updateEvent } from "../Redux/slices/EventAuthSlice";
 import { ServerVariables } from "../utils/ServerVariables";
 import { useNavigate } from "react-router-dom";
+import ErrorStyle from "./ErrorStyle";
 
 function EditProfileForm({title}) {
   const [preview,setPreview] = useState(null)
@@ -30,8 +31,15 @@ function EditProfileForm({title}) {
     const data = new FormData()
     const selectedImage = document.getElementById("upload");
     const image = selectedImage?.files[0];
+    if(!image){
+       setError('image is required')
+       return setTimeout(() => {
+        setError('')
+       }, 2000);
+    }
     data.append("profile", image)
     console.log(data)
+
 
     eventRequest({
       url:apiEndPoints.updateEventProfile,
@@ -40,7 +48,7 @@ function EditProfileForm({title}) {
     }).then(res =>{
       if(res.data.success){
         toast.success(res.data.success)
-        dispatch(upadteEvent(res.data.event))
+        dispatch(updateEvent(res.data.event))
         navigate(ServerVariables.eventProfile)
       }else{
         toast.error(res.data.error)
@@ -84,7 +92,7 @@ function EditProfileForm({title}) {
                 </div>
             )}
 
-            {error && <p className="text-danger">{error}</p>}
+            {error && <ErrorStyle error={error}/>}
 
             <div className="text-center">
                 <Button1 text="Update" style={{ marginTop: 10 }} onClick = {handleUpdate}/>

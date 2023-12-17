@@ -14,7 +14,7 @@ module.exports = async (req, res, next) => {
           success: false,
         });
       } else {
-        req.body.userId = decode.id;
+        req.userId = decode.id;
         next();
       }
     });
