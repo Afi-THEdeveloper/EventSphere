@@ -26,6 +26,7 @@ import IsLoggedOutEvent from "../components/IsLoggedOutEvent";
 import IsAdminLogged from "../components/IsAdminLogged";
 import IsAdminLoggedOut from "../components/IsAdminLoggedOut";
 import EventsTable from "../pages/AdminPages/EventsTable";
+import EventProfile from "../pages/EventPages/EventProfile";
 
 function AppRoutes() {
   const { loading } = useSelector((state) => state.loadings);
@@ -98,6 +99,7 @@ function AppRoutes() {
 
       <Route element={<IsLoggedEvent />}>
           <Route path={ServerVariables.eventHome} element={<EventHome />} />
+          <Route path={ServerVariables.eventProfile} element={<EventProfile />} />
       </Route>
 
       <Route element={<IsLoggedOutEvent/>}>

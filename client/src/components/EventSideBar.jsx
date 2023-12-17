@@ -9,9 +9,12 @@ import ProfileIcon from "./icons/ProfileIcon";
 import LogoutIcon from "./icons/LogoutIcon";
 import { useDispatch } from "react-redux";
 import { logout } from "../Redux/slices/EventAuthSlice";
+import SubscribePlanIcon from "./icons/SubscribePlanIcon";
+import { useNavigate } from "react-router-dom";
 
 function EventSideBar() {
-  const dispatch = useDispatch()  
+  const dispatch = useDispatch() 
+  const navigate = useNavigate() 
   const sideBarItems = [
     {
       label: "Home",
@@ -36,6 +39,11 @@ function EventSideBar() {
     {
       label: "Profile",
       icon: <ProfileIcon />,
+      href: ServerVariables.eventProfile,
+    },
+    {
+      label: "Subscriptions",
+      icon: <SubscribePlanIcon />,
       href: ServerVariables.eventHome,
     },
     {
@@ -54,7 +62,7 @@ function EventSideBar() {
       <h1 className="uppercase text-3xl font-thin text-[#FFB992] mt-2 mx-2">EventSphere</h1>
       <div className="mt-8">
         {sideBarItems.map((item) => (
-          <SidebarItem key={item.label} icon={item.icon} label={item.label} onClick={item?.onclick} />
+          <SidebarItem key={item.label} icon={item.icon} href={item.href} label={item.label} onClick={item?.onclick} />
         ))}
       </div>
     </div>

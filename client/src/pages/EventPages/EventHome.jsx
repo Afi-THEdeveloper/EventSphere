@@ -15,12 +15,7 @@ function EventHome() {
   };
 
   return (
-    // <div className="flex-1 flex flex-col items-center justify-center min-h-screen">
-    //   <div className="flex w-full flex-col max-w-full md:max-w-[400px] items-center space-y-3">
-    //     <Myh1 title={`Welcome ${event.title}`}/>
-    //     <Button1 text='Logout' onClick={HandleLogout}/>
-    //   </div>
-    // </div>
+
     <>
       <div className="flex">
         <EventSideBar />
