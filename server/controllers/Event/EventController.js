@@ -123,6 +123,31 @@ const securePassword = async (password) => {
     res.status(200).json({ success: "Login successful", token, event })
 })
 
+exports.updateEvent = CatchAsync(async (req,res)=>{
+  const {title,ownerName,place,services,officeAddress,phone,altPhone}  = req.body
+  const updatedEvent = await Event.findByIdAndUpdate(
+    {_id:req.eventId},
+    {
+      $set:{
+        title,
+        ownerName,
+        place,
+        officeAddress,
+        services,
+        phone,
+        altPhone
+      }
+    },
+    {new:true}
+  )
+
+  if(updatedEvent){
+    return res.status(200).json({success:'event updated successfully', event:updatedEvent})
+  }
+
+  return res.json({error:'event updation failed, try again'})
+})
+
 
 
 exports.updateEventProfile = CatchAsync(async (req,res)=>{
@@ -133,5 +158,6 @@ exports.updateEventProfile = CatchAsync(async (req,res)=>{
   await event.save()
   return res.status(200).json({success:'profile updated successfully', event})
 })
+
 
 

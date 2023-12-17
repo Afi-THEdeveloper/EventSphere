@@ -24,7 +24,7 @@ export const ServerVariables = {
   eventOtp:'/eventOtp',
   eventHome:'/eventHome',
   eventProfile:'/eventProfile',
-  editEventProfile:'/editEventProfile',
+  editEvent:'/editEvent',
   editProfileImage:'/editProfileImage',
 };
 

@@ -22,4 +22,5 @@ export const apiEndPoints = {
     postEventResendOtp : 'api/event/ResendOtp',
     postEventLogin : 'api/event/verifyEventLogin',
     updateEventProfile:'api/event/updateEventProfile',
+    updateEvent:'api/event/updateEvent',
 }

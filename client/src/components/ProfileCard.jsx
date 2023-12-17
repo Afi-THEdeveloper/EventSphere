@@ -65,7 +65,7 @@ function ProfileCard({ event }) {
                   href="javascript:;"
                   className="font-normal text-slate-700 hover:text-slate-400"
                 >
-                  <Button2 text={<EditIcon/>} onClick={()=> navigate(ServerVariables.editEventProfile)}/>
+                  <Button2 text={<EditIcon/>} onClick={()=> navigate(ServerVariables.editEvent)}/>
                 </a>
               </div>
             </div>
